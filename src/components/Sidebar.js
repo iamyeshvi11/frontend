@@ -9,16 +9,18 @@ const Sidebar = () => {
 
   const adminRoutes = [
     { path: '/admin', name: 'Dashboard', icon: '📊' },
-    { path: '/admin/users', name: 'Manage Users', icon: '👥' },
+    { path: '/admin/course-builder', name: 'Course Builder', icon: '📝' },
+    { path: '/admin/assignments', name: 'Assignments', icon: '📚' },
     { path: '/admin/reports', name: 'Reports', icon: '📈' },
+    { path: '/admin/users', name: 'Manage Users', icon: '👥' },
     { path: '/admin/settings', name: 'Settings', icon: '⚙️' },
   ];
 
   const employeeRoutes = [
     { path: '/employee', name: 'Dashboard', icon: '📊' },
-    { path: '/employee/tasks', name: 'My Tasks', icon: '✓' },
+    { path: '/employee/courses', name: 'My Courses', icon: '📚' },
     { path: '/employee/profile', name: 'Profile', icon: '👤' },
-    { path: '/employee/requests', name: 'Requests', icon: '📝' },
+    { path: '/employee/certificates', name: 'Certificates', icon: '🏆' },
   ];
 
   const routes = isAdmin() ? adminRoutes : employeeRoutes;
@@ -26,7 +28,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h2>🏢 Company Portal</h2>
+        <h2>🎓 Training Portal</h2>
         <div className="user-info">
           <div className="user-avatar">
             {user?.name?.charAt(0).toUpperCase()}

@@ -2,6 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
+import EmployeeCourses from './EmployeeCourses';
+import CourseViewWithQuiz from './CourseViewWithQuiz';
 import './Dashboard.css';
 
 const EmployeeHome = () => {
@@ -11,104 +13,89 @@ const EmployeeHome = () => {
     <div className="dashboard">
       <div className="dashboard-header">
         <h1>Employee Dashboard</h1>
-        <p>Hello, {user?.name}! Ready to be productive? 🚀</p>
+        <p>Hello, {user?.name}! Ready to learn? 🚀</p>
       </div>
 
       <div className="stats-grid">
         <div className="stat-card blue">
-          <div className="stat-icon">✓</div>
+          <div className="stat-icon">📚</div>
           <div className="stat-content">
-            <h3>My Tasks</h3>
-            <p className="stat-number">12</p>
-            <span className="stat-change">8 completed this week</span>
+            <h3>My Courses</h3>
+            <p className="stat-number">8</p>
+            <span className="stat-change">Assigned to you</span>
           </div>
         </div>
 
         <div className="stat-card green">
-          <div className="stat-icon">📅</div>
+          <div className="stat-icon">✅</div>
           <div className="stat-content">
-            <h3>Upcoming</h3>
+            <h3>Completed</h3>
             <p className="stat-number">5</p>
-            <span className="stat-change">Due this week</span>
+            <span className="stat-change">62.5% complete</span>
           </div>
         </div>
 
         <div className="stat-card purple">
-          <div className="stat-icon">⏰</div>
+          <div className="stat-icon">⏳</div>
           <div className="stat-content">
-            <h3>Hours Logged</h3>
-            <p className="stat-number">38.5</p>
-            <span className="stat-change">This week</span>
+            <h3>In Progress</h3>
+            <p className="stat-number">2</p>
+            <span className="stat-change">Keep going!</span>
           </div>
         </div>
 
         <div className="stat-card orange">
           <div className="stat-icon">🎯</div>
           <div className="stat-content">
-            <h3>Projects</h3>
-            <p className="stat-number">4</p>
-            <span className="stat-change">Active projects</span>
+            <h3>Avg Score</h3>
+            <p className="stat-number">85%</p>
+            <span className="stat-change">Great performance!</span>
           </div>
         </div>
       </div>
 
       <div className="content-grid">
         <div className="content-card">
-          <h2>Recent Tasks</h2>
-          <div className="task-list">
-            <div className="task-item">
-              <input type="checkbox" id="task1" />
-              <label htmlFor="task1">
-                <span className="task-title">Complete project documentation</span>
-                <span className="task-priority high">High Priority</span>
-              </label>
-            </div>
-            <div className="task-item">
-              <input type="checkbox" id="task2" />
-              <label htmlFor="task2">
-                <span className="task-title">Review code changes</span>
-                <span className="task-priority medium">Medium</span>
-              </label>
-            </div>
-            <div className="task-item">
-              <input type="checkbox" id="task3" defaultChecked />
-              <label htmlFor="task3">
-                <span className="task-title">Team meeting attendance</span>
-                <span className="task-priority low">Low</span>
-              </label>
-            </div>
-            <div className="task-item">
-              <input type="checkbox" id="task4" />
-              <label htmlFor="task4">
-                <span className="task-title">Update project timeline</span>
-                <span className="task-priority medium">Medium</span>
-              </label>
-            </div>
+          <h2>Quick Actions</h2>
+          <div className="quick-actions">
+            <a href="/employee/courses" className="action-btn">📚 View My Courses</a>
+            <a href="/employee/profile" className="action-btn">👤 My Profile</a>
+            <a href="/employee/certificates" className="action-btn">🏆 Certificates</a>
           </div>
         </div>
 
         <div className="content-card">
-          <h2>Quick Actions</h2>
-          <div className="quick-actions">
-            <button className="action-btn">📝 New Request</button>
-            <button className="action-btn">⏰ Log Time</button>
-            <button className="action-btn">📊 View Reports</button>
-            <button className="action-btn">💬 Message Team</button>
+          <h2>Upcoming Deadlines</h2>
+          <div className="activity-list">
+            <div className="activity-item">
+              <div className="activity-icon">📚</div>
+              <div className="activity-content">
+                <p className="activity-title">Cybersecurity Awareness</p>
+                <p className="activity-time">Due in 3 days</p>
+              </div>
+            </div>
+            <div className="activity-item">
+              <div className="activity-icon">📚</div>
+              <div className="activity-content">
+                <p className="activity-title">Data Privacy Training</p>
+                <p className="activity-time">Due in 5 days</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="content-card">
-        <h2>Announcements</h2>
+        <h2>Recent Activity</h2>
         <div className="announcement-list">
           <div className="announcement-item">
-            <h4>🎉 New Feature Launch</h4>
-            <p>Check out our new task management features!</p>
+            <h4>🎉 Course Completed!</h4>
+            <p>You completed "Workplace Safety" with a score of 92%</p>
             <span className="announcement-date">2 days ago</span>
           </div>
           <div className="announcement-item">
-            <h4>📅 Company Holiday</h4>
-            <p>Office will be closed next Friday for the holiday.</p>
+            <h4>📚 New Course Assigned</h4>
+            <p>A new training course has been assigned to you.</p>
             <span className="announcement-date">5 days ago</span>
           </div>
         </div>
@@ -117,16 +104,7 @@ const EmployeeHome = () => {
   );
 };
 
-const MyTasks = () => (
-  <div className="dashboard">
-    <h1>My Tasks</h1>
-    <div className="content-card">
-      <p>Full task management interface coming soon...</p>
-    </div>
-  </div>
-);
-
-const Profile = () => {
+const MyProfile = () => {
   const { user } = useAuth();
 
   return (
@@ -149,11 +127,11 @@ const Profile = () => {
   );
 };
 
-const Requests = () => (
+const Certificates = () => (
   <div className="dashboard">
-    <h1>My Requests</h1>
+    <h1>My Certificates</h1>
     <div className="content-card">
-      <p>Request management interface coming soon...</p>
+      <p>Your training certificates will appear here.</p>
     </div>
   </div>
 );
@@ -163,9 +141,10 @@ const EmployeeDashboard = () => {
     <Layout>
       <Routes>
         <Route index element={<EmployeeHome />} />
-        <Route path="tasks" element={<MyTasks />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="requests" element={<Requests />} />
+        <Route path="courses" element={<EmployeeCourses />} />
+        <Route path="courses/:assignmentId" element={<CourseViewWithQuiz />} />
+        <Route path="profile" element={<MyProfile />} />
+        <Route path="certificates" element={<Certificates />} />
       </Routes>
     </Layout>
   );

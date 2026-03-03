@@ -2,6 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
+import AdminCourseBuilder from './AdminCourseBuilder';
+import AdminReports from './AdminReports';
 import './Dashboard.css';
 
 const AdminHome = () => {
@@ -16,96 +18,114 @@ const AdminHome = () => {
 
       <div className="stats-grid">
         <div className="stat-card blue">
-          <div className="stat-icon">👥</div>
+          <div className="stat-icon">📚</div>
           <div className="stat-content">
-            <h3>Total Users</h3>
-            <p className="stat-number">248</p>
-            <span className="stat-change positive">+12% from last month</span>
+            <h3>Total Courses</h3>
+            <p className="stat-number">25</p>
+            <span className="stat-change positive">+3 this month</span>
           </div>
         </div>
 
         <div className="stat-card green">
-          <div className="stat-icon">📊</div>
+          <div className="stat-icon">👥</div>
           <div className="stat-content">
-            <h3>Active Projects</h3>
-            <p className="stat-number">32</p>
-            <span className="stat-change positive">+5 new projects</span>
+            <h3>Total Employees</h3>
+            <p className="stat-number">150</p>
+            <span className="stat-change positive">+12 new users</span>
           </div>
         </div>
 
         <div className="stat-card purple">
           <div className="stat-icon">✓</div>
           <div className="stat-content">
-            <h3>Completed Tasks</h3>
-            <p className="stat-number">1,247</p>
-            <span className="stat-change positive">+18% completion</span>
+            <h3>Completed Courses</h3>
+            <p className="stat-number">350</p>
+            <span className="stat-change positive">70% completion</span>
           </div>
         </div>
 
         <div className="stat-card orange">
-          <div className="stat-icon">📈</div>
+          <div className="stat-icon">⚠️</div>
           <div className="stat-content">
-            <h3>Revenue</h3>
-            <p className="stat-number">$45.2K</p>
-            <span className="stat-change positive">+23% increase</span>
+            <h3>Overdue</h3>
+            <p className="stat-number">15</p>
+            <span className="stat-change negative">Needs attention</span>
           </div>
         </div>
       </div>
 
       <div className="content-grid">
         <div className="content-card">
+          <h2>Quick Actions</h2>
+          <div className="quick-actions">
+            <a href="/admin/course-builder" className="action-btn">
+              📝 Create New Course
+            </a>
+            <a href="/admin/reports" className="action-btn">
+              📊 View Reports
+            </a>
+            <a href="/admin/users" className="action-btn">
+              👥 Manage Users
+            </a>
+            <a href="/admin/assignments" className="action-btn">
+              📚 Assign Courses
+            </a>
+          </div>
+        </div>
+
+        <div className="content-card">
           <h2>Recent Activity</h2>
           <div className="activity-list">
             <div className="activity-item">
-              <div className="activity-icon">👤</div>
+              <div className="activity-icon">📚</div>
               <div className="activity-content">
-                <p className="activity-title">New user registered</p>
+                <p className="activity-title">New course created</p>
                 <p className="activity-time">2 minutes ago</p>
-              </div>
-            </div>
-            <div className="activity-item">
-              <div className="activity-icon">📝</div>
-              <div className="activity-content">
-                <p className="activity-title">Project updated</p>
-                <p className="activity-time">15 minutes ago</p>
               </div>
             </div>
             <div className="activity-item">
               <div className="activity-icon">✓</div>
               <div className="activity-content">
-                <p className="activity-title">Task completed</p>
+                <p className="activity-title">Course completed by employee</p>
+                <p className="activity-time">15 minutes ago</p>
+              </div>
+            </div>
+            <div className="activity-item">
+              <div className="activity-icon">📝</div>
+              <div className="activity-content">
+                <p className="activity-title">Assignment created</p>
                 <p className="activity-time">1 hour ago</p>
               </div>
             </div>
             <div className="activity-item">
-              <div className="activity-icon">⚙️</div>
+              <div className="activity-icon">👤</div>
               <div className="activity-content">
-                <p className="activity-title">Settings updated</p>
+                <p className="activity-title">New employee registered</p>
                 <p className="activity-time">3 hours ago</p>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="content-card">
-          <h2>System Status</h2>
-          <div className="status-list">
-            <div className="status-item">
-              <span>Server Status</span>
-              <span className="status-badge success">Online</span>
-            </div>
-            <div className="status-item">
-              <span>Database</span>
-              <span className="status-badge success">Connected</span>
-            </div>
-            <div className="status-item">
-              <span>API Status</span>
-              <span className="status-badge success">Operational</span>
-            </div>
-            <div className="status-item">
-              <span>Backup</span>
-              <span className="status-badge warning">Pending</span>
-            </div>
+      <div className="content-card">
+        <h2>System Status</h2>
+        <div className="status-list">
+          <div className="status-item">
+            <span>Training System</span>
+            <span className="status-badge success">Operational</span>
+          </div>
+          <div className="status-item">
+            <span>Database</span>
+            <span className="status-badge success">Connected</span>
+          </div>
+          <div className="status-item">
+            <span>API Status</span>
+            <span className="status-badge success">Online</span>
+          </div>
+          <div className="status-item">
+            <span>Course Generation</span>
+            <span className="status-badge success">Active</span>
           </div>
         </div>
       </div>
@@ -122,11 +142,11 @@ const ManageUsers = () => (
   </div>
 );
 
-const Reports = () => (
+const ManageAssignments = () => (
   <div className="dashboard">
-    <h1>Reports</h1>
+    <h1>Manage Assignments</h1>
     <div className="content-card">
-      <p>Reports and analytics coming soon...</p>
+      <p>Assignment management interface coming soon...</p>
     </div>
   </div>
 );
@@ -146,7 +166,9 @@ const AdminDashboard = () => {
       <Routes>
         <Route index element={<AdminHome />} />
         <Route path="users" element={<ManageUsers />} />
-        <Route path="reports" element={<Reports />} />
+        <Route path="course-builder" element={<AdminCourseBuilder />} />
+        <Route path="reports" element={<AdminReports />} />
+        <Route path="assignments" element={<ManageAssignments />} />
         <Route path="settings" element={<Settings />} />
       </Routes>
     </Layout>
