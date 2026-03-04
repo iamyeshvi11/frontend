@@ -311,10 +311,11 @@ const AdminCourseBuilder = () => {
                     className="module-title-input"
                   />
                   <button
-                    className="btn btn-sm btn-danger"
+                    className="btn btn-icon btn-danger"
                     onClick={() => deleteModule(moduleIndex)}
+                    title="Delete Module"
                   >
-                    Delete Module
+                    ×
                   </button>
                 </div>
 
@@ -329,8 +330,9 @@ const AdminCourseBuilder = () => {
                         rows="3"
                       />
                       <button
-                        className="btn btn-sm btn-danger"
+                        className="btn btn-icon btn-danger"
                         onClick={() => deleteContentBlock(moduleIndex, blockIndex)}
+                        title="Delete content block"
                       >
                         ×
                       </button>
@@ -361,10 +363,11 @@ const AdminCourseBuilder = () => {
                       <div className="question-header">
                         <span>Question {questionIndex + 1}</span>
                         <button
-                          className="btn btn-sm btn-danger"
+                          className="btn btn-icon btn-danger"
                           onClick={() => deleteQuestion(moduleIndex, questionIndex)}
+                          title="Delete question"
                         >
-                          Delete
+                          ×
                         </button>
                       </div>
 

@@ -4,6 +4,11 @@ import Layout from '../components/Layout';
 import { useAuth } from '../context/AuthContext';
 import AdminCourseBuilder from './AdminCourseBuilder';
 import AdminReports from './AdminReports';
+import ManageUsers from './ManageUsers';
+import ManageAssignments from './ManageAssignments';
+import MyCourses from './MyCourses';
+import CourseDetails from './CourseDetails';
+import CourseEdit from './CourseEdit';
 import './Dashboard.css';
 
 const AdminHome = () => {
@@ -133,29 +138,20 @@ const AdminHome = () => {
   );
 };
 
-const ManageUsers = () => (
-  <div className="dashboard">
-    <h1>Manage Users</h1>
-    <div className="content-card">
-      <p>User management interface coming soon...</p>
-    </div>
-  </div>
-);
-
-const ManageAssignments = () => (
-  <div className="dashboard">
-    <h1>Manage Assignments</h1>
-    <div className="content-card">
-      <p>Assignment management interface coming soon...</p>
-    </div>
-  </div>
-);
-
 const Settings = () => (
   <div className="dashboard">
     <h1>Settings</h1>
     <div className="content-card">
-      <p>System settings coming soon...</p>
+      <h2>System Settings</h2>
+      <p>System configuration options will appear here.</p>
+      <br />
+      <h3>Quick Settings:</h3>
+      <ul>
+        <li>Email notifications: Enabled</li>
+        <li>Reminder frequency: Daily</li>
+        <li>Default pass threshold: 70%</li>
+        <li>Course generation: AI-assisted</li>
+      </ul>
     </div>
   </div>
 );
@@ -166,6 +162,9 @@ const AdminDashboard = () => {
       <Routes>
         <Route index element={<AdminHome />} />
         <Route path="users" element={<ManageUsers />} />
+        <Route path="courses" element={<MyCourses />} />
+        <Route path="courses/:id" element={<CourseDetails />} />
+        <Route path="courses/:id/edit" element={<CourseEdit />} />
         <Route path="course-builder" element={<AdminCourseBuilder />} />
         <Route path="reports" element={<AdminReports />} />
         <Route path="assignments" element={<ManageAssignments />} />

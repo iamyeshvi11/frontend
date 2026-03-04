@@ -156,16 +156,23 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  gap: 0.75rem;
 }
 
 .module-title-input {
   flex: 1;
   font-size: 1.2rem;
   font-weight: 600;
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
-  margin-right: 1rem;
+}
+
+.module-header .btn-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  font-size: 20px;
 }
 
 /* Content Blocks */
@@ -182,6 +189,7 @@
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  align-items: flex-start;
 }
 
 .content-block textarea {
@@ -197,6 +205,21 @@
 .content-block textarea:focus {
   outline: none;
   border-color: #3498db;
+}
+
+.content-block .btn-danger {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  border-radius: 6px;
+  flex-shrink: 0;
+  margin-top: 4px;
 }
 
 /* Quiz Section */
@@ -231,11 +254,20 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  gap: 0.75rem;
 }
 
 .question-header span {
   font-weight: 600;
   color: #2c3e50;
+  flex: 1;
+}
+
+.question-header .btn-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  font-size: 18px;
 }
 
 .options-group {
@@ -335,6 +367,25 @@
   font-size: 0.875rem;
 }
 
+/* Icon Buttons (for delete/close) */
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.btn-icon:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .admin-course-builder {
@@ -366,17 +417,17 @@
   }
 
   .module-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 
   .module-title-input {
-    margin-right: 0;
+    flex: 1 1 auto;
+    min-width: 200px;
   }
 
   .content-block {
-    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .option-row {

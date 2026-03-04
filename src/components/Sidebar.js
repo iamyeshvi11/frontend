@@ -9,8 +9,9 @@ const Sidebar = () => {
 
   const adminRoutes = [
     { path: '/admin', name: 'Dashboard', icon: '📊' },
+    { path: '/admin/courses', name: 'My Courses', icon: '📚' },
     { path: '/admin/course-builder', name: 'Course Builder', icon: '📝' },
-    { path: '/admin/assignments', name: 'Assignments', icon: '📚' },
+    { path: '/admin/assignments', name: 'Assignments', icon: '📋' },
     { path: '/admin/reports', name: 'Reports', icon: '📈' },
     { path: '/admin/users', name: 'Manage Users', icon: '👥' },
     { path: '/admin/settings', name: 'Settings', icon: '⚙️' },
