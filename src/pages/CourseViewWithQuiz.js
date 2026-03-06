@@ -237,11 +237,53 @@ const CourseViewWithQuiz = () => {
               </div>
 
               <div className="content-blocks">
-                {currentModule.contentBlocks.map((block, index) => (
-                  <div key={index} className="content-block">
-                    <p>{block}</p>
-                  </div>
-                ))}
+                {currentModule.contentBlocks.map((block, index) => {
+                  const isObject = typeof block === 'object';
+                  const blockType = isObject ? block.type : 'text';
+                  const blockContent = isObject ? block.content : block;
+                  const blockTitle = isObject ? block.title : '';
+                  const fileUrl = isObject ? block.fileUrl : '';
+                  
+                  return (
+                    <div key={index} className="content-block">
+                      {blockTitle && <h4>{blockTitle}</h4>}
+                      
+                      {blockType === 'text' && <p>{blockContent}</p>}
+                      
+                      {blockType === 'video' && fileUrl && (
+                        <div className="video-container">
+                          <video controls width="100%" style={{ maxWidth: '800px' }}>
+                            <source src={`${API_URL.replace('/api', '')}${fileUrl}`} />
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
+                      )}
+                      
+                      {blockType === 'pdf' && fileUrl && (
+                        <div className="pdf-container">
+                          <a
+                            href={`${API_URL.replace('/api', '')}${fileUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-primary"
+                          >
+                            📄 Open PDF Document
+                          </a>
+                        </div>
+                      )}
+                      
+                      {blockType === 'image' && fileUrl && (
+                        <div className="image-container">
+                          <img
+                            src={`${API_URL.replace('/api', '')}${fileUrl}`}
+                            alt={blockTitle || 'Course image'}
+                            style={{ maxWidth: '100%', height: 'auto' }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="module-actions">

@@ -46,6 +46,14 @@ const AdminCourseBuilder = () => {
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
+      
+      // Log the data being sent for debugging
+      console.log('Saving course:', {
+        title: generatedCourse.title,
+        moduleCount: generatedCourse.modules?.length,
+        modules: generatedCourse.modules
+      });
+
       const response = await axios.post(
         `${API_URL}/courses`,
         generatedCourse,
@@ -61,7 +69,19 @@ const AdminCourseBuilder = () => {
       setEditMode(false);
     } catch (error) {
       console.error('Error saving course:', error);
-      alert(error.response?.data?.message || 'Failed to save course');
+      console.error('Error response:', error.response?.data);
+      
+      // Display detailed error message
+      let errorMessage = 'Failed to save course';
+      if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
+        errorMessage = error.response.data.errors.map(e => 
+          `${e.field || ''}: ${e.message || e.msg}`
+        ).join('\n');
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      alert(errorMessage);
     } finally {
       setSaving(false);
     }
@@ -113,21 +133,90 @@ const AdminCourseBuilder = () => {
   };
 
   // Add content block to module
-  const addContentBlock = (moduleIndex) => {
+  const addContentBlock = (moduleIndex, type = 'text') => {
     setGeneratedCourse(prev => {
       const newModules = [...prev.modules];
-      newModules[moduleIndex].contentBlocks.push('New content block');
+      const newBlock = {
+        type: type,
+        content: type === 'text' ? 'New content block' : '',
+        title: '',
+        fileUrl: '',
+        duration: null
+      };
+      newModules[moduleIndex].contentBlocks.push(newBlock);
       return { ...prev, modules: newModules };
     });
   };
 
   // Update content block
-  const updateContentBlock = (moduleIndex, blockIndex, value) => {
+  const updateContentBlock = (moduleIndex, blockIndex, field, value) => {
     setGeneratedCourse(prev => {
       const newModules = [...prev.modules];
-      newModules[moduleIndex].contentBlocks[blockIndex] = value;
+      const block = newModules[moduleIndex].contentBlocks[blockIndex];
+      
+      // Handle legacy string format
+      if (typeof block === 'string') {
+        if (field === 'content') {
+          newModules[moduleIndex].contentBlocks[blockIndex] = value;
+        }
+      } else {
+        newModules[moduleIndex].contentBlocks[blockIndex] = {
+          ...block,
+          [field]: value
+        };
+      }
       return { ...prev, modules: newModules };
     });
+  };
+
+  // Handle file upload for content block
+  const handleFileUpload = async (moduleIndex, blockIndex, file) => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${API_URL}/upload`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      const uploadData = response.data.data;
+      
+      // Update content block with file info
+      setGeneratedCourse(prev => {
+        const newModules = [...prev.modules];
+        const block = newModules[moduleIndex].contentBlocks[blockIndex];
+        
+        newModules[moduleIndex].contentBlocks[blockIndex] = {
+          type: uploadData.fileType,
+          content: uploadData.fileUrl,
+          fileUrl: uploadData.fileUrl,
+          title: typeof block === 'object' && block.title ? block.title : uploadData.fileName,
+          metadata: {
+            fileSize: uploadData.fileSize,
+            mimeType: uploadData.mimeType,
+            uploadedBy: uploadData.uploadedBy,
+            uploadedAt: uploadData.uploadedAt
+          }
+        };
+        
+        return { ...prev, modules: newModules };
+      });
+
+      alert('File uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert(error.response?.data?.message || 'Failed to upload file');
+    }
   };
 
   // Delete content block
@@ -321,29 +410,86 @@ const AdminCourseBuilder = () => {
 
                 {/* Content Blocks */}
                 <div className="content-blocks">
-                  <h4>Content</h4>
-                  {module.contentBlocks.map((block, blockIndex) => (
-                    <div key={blockIndex} className="content-block">
-                      <textarea
-                        value={block}
-                        onChange={(e) => updateContentBlock(moduleIndex, blockIndex, e.target.value)}
-                        rows="3"
-                      />
+                  <div className="content-blocks-header">
+                    <h4>Content</h4>
+                    <div className="content-block-actions">
                       <button
-                        className="btn btn-icon btn-danger"
-                        onClick={() => deleteContentBlock(moduleIndex, blockIndex)}
-                        title="Delete content block"
+                        className="btn btn-sm btn-secondary"
+                        onClick={() => addContentBlock(moduleIndex, 'text')}
+                        title="Add text content"
                       >
-                        ×
+                        + Text
+                      </button>
+                      <button
+                        className="btn btn-sm btn-primary"
+                        onClick={() => addContentBlock(moduleIndex, 'video')}
+                        title="Add video"
+                      >
+                        + Video
+                      </button>
+                      <button
+                        className="btn btn-sm btn-info"
+                        onClick={() => addContentBlock(moduleIndex, 'pdf')}
+                        title="Add PDF"
+                      >
+                        + PDF
                       </button>
                     </div>
-                  ))}
-                  <button
-                    className="btn btn-sm btn-secondary"
-                    onClick={() => addContentBlock(moduleIndex)}
-                  >
-                    + Add Content Block
-                  </button>
+                  </div>
+                  {module.contentBlocks.map((block, blockIndex) => {
+                    const isObject = typeof block === 'object';
+                    const blockType = isObject ? block.type : 'text';
+                    const blockContent = isObject ? block.content : block;
+                    
+                    return (
+                      <div key={blockIndex} className="content-block">
+                        <div className="block-type-badge">{blockType.toUpperCase()}</div>
+                        
+                        {blockType === 'text' ? (
+                          <textarea
+                            value={blockContent}
+                            onChange={(e) => updateContentBlock(moduleIndex, blockIndex, 'content', e.target.value)}
+                            rows="3"
+                            placeholder="Enter text content..."
+                          />
+                        ) : (
+                          <div className="file-upload-section">
+                            <div className="form-group">
+                              <label>Title</label>
+                              <input
+                                type="text"
+                                value={isObject ? block.title : ''}
+                                onChange={(e) => updateContentBlock(moduleIndex, blockIndex, 'title', e.target.value)}
+                                placeholder="Content title..."
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>Upload File</label>
+                              <input
+                                type="file"
+                                accept={blockType === 'video' ? 'video/*' : blockType === 'pdf' ? 'application/pdf' : 'image/*'}
+                                onChange={(e) => handleFileUpload(moduleIndex, blockIndex, e.target.files[0])}
+                              />
+                            </div>
+                            {isObject && block.fileUrl && (
+                              <div className="file-preview">
+                                <p>✓ File uploaded: {block.title || 'Unnamed file'}</p>
+                                <small>{block.fileUrl}</small>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        <button
+                          className="btn btn-icon btn-danger"
+                          onClick={() => deleteContentBlock(moduleIndex, blockIndex)}
+                          title="Delete content block"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* Quiz Questions */}
