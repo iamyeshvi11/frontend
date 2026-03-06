@@ -43,6 +43,24 @@ const AdminCourseBuilder = () => {
   const handleSave = async () => {
     if (!generatedCourse) return;
 
+    // Validate that all non-text content blocks have uploaded files
+    const hasUnuploadedFiles = generatedCourse.modules.some((module, moduleIdx) => {
+      return module.contentBlocks.some((block, blockIdx) => {
+        if (typeof block === 'object' && block.type !== 'text') {
+          const hasFile = block.fileUrl && block.fileUrl.trim() !== '';
+          if (!hasFile) {
+            alert(`Module ${moduleIdx + 1} has a ${block.type} block without an uploaded file. Please upload a file or remove the block.`);
+            return true;
+          }
+        }
+        return false;
+      });
+    });
+
+    if (hasUnuploadedFiles) {
+      return; // Don't proceed with save
+    }
+
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
@@ -138,8 +156,8 @@ const AdminCourseBuilder = () => {
       const newModules = [...prev.modules];
       const newBlock = {
         type: type,
-        content: type === 'text' ? 'New content block' : '',
-        title: '',
+        content: type === 'text' ? 'New content block' : '[Upload a file to add content]',
+        title: type === 'text' ? '' : 'Untitled',
         fileUrl: '',
         duration: null
       };
@@ -454,6 +472,18 @@ const AdminCourseBuilder = () => {
                           />
                         ) : (
                           <div className="file-upload-section">
+                            {isObject && !block.fileUrl && (
+                              <div className="file-required-warning" style={{
+                                background: '#fff3cd',
+                                border: '1px solid #ffc107',
+                                padding: '0.5rem',
+                                borderRadius: '4px',
+                                marginBottom: '0.5rem',
+                                color: '#856404'
+                              }}>
+                                ⚠️ Please upload a file before saving
+                              </div>
+                            )}
                             <div className="form-group">
                               <label>Title</label>
                               <input
@@ -464,7 +494,7 @@ const AdminCourseBuilder = () => {
                               />
                             </div>
                             <div className="form-group">
-                              <label>Upload File</label>
+                              <label>Upload File {!isObject || !block.fileUrl ? '(Required)' : ''}</label>
                               <input
                                 type="file"
                                 accept={blockType === 'video' ? 'video/*' : blockType === 'pdf' ? 'application/pdf' : 'image/*'}
